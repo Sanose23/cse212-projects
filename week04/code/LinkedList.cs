@@ -27,7 +27,7 @@ public class LinkedList : IEnumerable<int>
     public void InsertTail(int value)
     {
         Node newNode = new(value);
-        if (_tail is null) // List is empty
+        if (_tail is null)
         {
             _head = newNode;
             _tail = newNode;
@@ -64,7 +64,8 @@ public class LinkedList : IEnumerable<int>
         else if (_tail is not null)
         {
             _tail = _tail.Prev;
-            _tail!.Next = null;
+            if (_tail != null)
+                _tail.Next = null;
         }
     }
 
@@ -113,7 +114,7 @@ public class LinkedList : IEnumerable<int>
                     current.Prev!.Next = current.Next;
                     current.Next!.Prev = current.Prev;
                 }
-                return; // Only remove first match
+                return;
             }
             current = current.Next;
         }
@@ -129,21 +130,6 @@ public class LinkedList : IEnumerable<int>
                 current.Data = newValue;
             }
             current = current.Next;
-        }
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return this.GetEnumerator();
-    }
-
-    public IEnumerator<int> GetEnumerator()
-    {
-        var curr = _head;
-        while (curr is not null)
-        {
-            yield return curr.Data;
-            curr = curr.Next;
         }
     }
 
@@ -171,19 +157,35 @@ public class LinkedList : IEnumerable<int>
     {
         return _head is not null && _tail is not null;
     }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return this.GetEnumerator();
+    }
+
+    public IEnumerator<int> GetEnumerator()
+    {
+        var curr = _head;
+        while (curr is not null)
+        {
+            yield return curr.Data;
+            curr = curr.Next;
+        }
+    }
 }
 
-public class Node
+public class LinkedListNode
 {
     public int Data;
-    public Node? Prev;
-    public Node? Next;
+    public LinkedListNode? Prev;
+    public LinkedListNode? Next;
 
-    public Node(int data)
+    public LinkedListNode(int data)
     {
         Data = data;
     }
 }
+
 
 public static class IntArrayExtensionMethods
 {
